@@ -1,0 +1,70 @@
+public class AdapterPatternExample {
+
+    interface PaymentProcessor {
+        void processPayment(double amount);
+    }
+
+    static class PayPalGateway {
+        public void sendPayment(double amount) {
+            System.out.println("Paid $" + amount + " using PayPal.");
+        }
+    }
+
+    static class StripeGateway {
+        public void makePayment(double amount) {
+            System.out.println("Paid $" + amount + " using Stripe.");
+        }
+    }
+
+    static class RazorpayGateway {
+        public void initiateTransaction(double amount) {
+            System.out.println("Paid $" + amount + " using Razorpay.");
+        }
+    }
+
+    static class PayPalAdapter implements PaymentProcessor {
+        private PayPalGateway payPal;
+
+        public PayPalAdapter(PayPalGateway payPal) {
+            this.payPal = payPal;
+        }
+
+        public void processPayment(double amount) {
+            payPal.sendPayment(amount);
+        }
+    }
+
+    static class StripeAdapter implements PaymentProcessor {
+        private StripeGateway stripe;
+
+        public StripeAdapter(StripeGateway stripe) {
+            this.stripe = stripe;
+        }
+
+        public void processPayment(double amount) {
+            stripe.makePayment(amount);
+        }
+    }
+
+    static class RazorpayAdapter implements PaymentProcessor {
+        private RazorpayGateway razorpay;
+
+        public RazorpayAdapter(RazorpayGateway razorpay) {
+            this.razorpay = razorpay;
+        }
+
+        public void processPayment(double amount) {
+            razorpay.initiateTransaction(amount);
+        }
+    }
+
+    public static void main(String[] args) {
+        PaymentProcessor paypalProcessor = new PayPalAdapter(new PayPalGateway());
+        PaymentProcessor stripeProcessor = new StripeAdapter(new StripeGateway());
+        PaymentProcessor razorpayProcessor = new RazorpayAdapter(new RazorpayGateway());
+
+        paypalProcessor.processPayment(100.0);
+        stripeProcessor.processPayment(200.0);
+        razorpayProcessor.processPayment(300.0);
+    }
+}

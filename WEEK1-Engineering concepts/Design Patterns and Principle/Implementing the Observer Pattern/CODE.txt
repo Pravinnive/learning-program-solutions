@@ -1,0 +1,81 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class ObserverPatternExample {
+
+    interface Observer {
+        void update(String stockName, double price);
+    }
+
+    interface Stock {
+        void registerObserver(Observer o);
+        void removeObserver(Observer o);
+        void notifyObservers();
+    }
+
+    static class StockMarket implements Stock {
+        private List<Observer> observers = new ArrayList<>();
+        private String stockName;
+        private double price;
+
+        public void setStock(String stockName, double price) {
+            this.stockName = stockName;
+            this.price = price;
+            notifyObservers();
+        }
+
+        public void registerObserver(Observer o) {
+            observers.add(o);
+        }
+
+        public void removeObserver(Observer o) {
+            observers.remove(o);
+        }
+
+        public void notifyObservers() {
+            for (Observer o : observers) {
+                o.update(stockName, price);
+            }
+        }
+    }
+
+    static class MobileApp implements Observer {
+        private String name;
+
+        public MobileApp(String name) {
+            this.name = name;
+        }
+
+        public void update(String stockName, double price) {
+            System.out.println(name + " - MobileApp: " + stockName + " is now $" + price);
+        }
+    }
+
+    static class WebApp implements Observer {
+        private String name;
+
+        public WebApp(String name) {
+            this.name = name;
+        }
+
+        public void update(String stockName, double price) {
+            System.out.println(name + " - WebApp: " + stockName + " is now $" + price);
+        }
+    }
+
+    public static void main(String[] args) {
+        StockMarket stockMarket = new StockMarket();
+
+        Observer mobileUser = new MobileApp("Alice");
+        Observer webUser = new WebApp("Bob");
+
+        stockMarket.registerObserver(mobileUser);
+        stockMarket.registerObserver(webUser);
+
+        stockMarket.setStock("AAPL", 150.50);
+        stockMarket.setStock("GOOGL", 2750.00);
+
+        stockMarket.removeObserver(webUser);
+        stockMarket.setStock("TSLA", 720.25);
+    }
+}

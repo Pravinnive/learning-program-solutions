@@ -1,0 +1,84 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class InventoryManagementSystem {
+
+    static class Product {
+        private String productId;
+        private String productName;
+        private int quantity;
+        private double price;
+
+        public Product(String productId, String productName, int quantity, double price) {
+            this.productId = productId;
+            this.productName = productName;
+            this.quantity = quantity;
+            this.price = price;
+        }
+
+        public void setProductName(String productName) {
+            this.productName = productName;
+        }
+
+        public void setQuantity(int quantity) {
+            this.quantity = quantity;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public String toString() {
+            return "ProductID: " + productId + ", Name: " + productName + ", Quantity: " + quantity + ", Price: " + price;
+        }
+    }
+
+    static class Inventory {
+        private Map<String, Product> products = new HashMap<>();
+
+        public void addProduct(Product product) {
+            products.put(product.productId, product);
+        }
+
+        public void updateProduct(String productId, String name, int quantity, double price) {
+            Product product = products.get(productId);
+            if (product != null) {
+                product.setProductName(name);
+                product.setQuantity(quantity);
+                product.setPrice(price);
+            }
+        }
+
+        public void deleteProduct(String productId) {
+            products.remove(productId);
+        }
+
+        public void displayInventory() {
+            for (Product product : products.values()) {
+                System.out.println(product);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Inventory inventory = new Inventory();
+
+        Product p1 = new Product("P001", "Laptop", 10, 750.0);
+        Product p2 = new Product("P002", "Mouse", 50, 15.5);
+        Product p3 = new Product("P003", "Keyboard", 30, 25.0);
+
+        inventory.addProduct(p1);
+        inventory.addProduct(p2);
+        inventory.addProduct(p3);
+
+        System.out.println("Initial Inventory:");
+        inventory.displayInventory();
+
+        inventory.updateProduct("P002", "Wireless Mouse", 45, 18.0);
+
+        inventory.deleteProduct("P003");
+
+        System.out.println("\nUpdated Inventory:");
+        inventory.displayInventory();
+    }
+}

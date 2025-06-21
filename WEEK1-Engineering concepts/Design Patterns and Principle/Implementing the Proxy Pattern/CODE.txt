@@ -1,0 +1,49 @@
+public class ProxyPatternExample {
+
+    interface Image {
+        void display();
+    }
+
+    static class RealImage implements Image {
+        private String fileName;
+
+        public RealImage(String fileName) {
+            this.fileName = fileName;
+            loadFromRemoteServer();
+        }
+
+        private void loadFromRemoteServer() {
+            System.out.println("Loading image from remote server: " + fileName);
+        }
+
+        public void display() {
+            System.out.println("Displaying image: " + fileName);
+        }
+    }
+
+    static class ProxyImage implements Image {
+        private String fileName;
+        private RealImage realImage;
+
+        public ProxyImage(String fileName) {
+            this.fileName = fileName;
+        }
+
+        public void display() {
+            if (realImage == null) {
+                realImage = new RealImage(fileName);
+            }
+            realImage.display();
+        }
+    }
+
+    public static void main(String[] args) {
+        Image image1 = new ProxyImage("photo1.jpg");
+        Image image2 = new ProxyImage("photo2.jpg");
+
+        image1.display();
+        image1.display();
+        image2.display();
+        image2.display();
+    }
+}

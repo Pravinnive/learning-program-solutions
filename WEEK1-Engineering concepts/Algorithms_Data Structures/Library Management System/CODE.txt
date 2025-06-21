@@ -1,0 +1,68 @@
+import java.util.*;
+
+public class LibraryManagementSystem {
+
+    static class Book {
+        int bookId;
+        String title;
+        String author;
+
+        public Book(int bookId, String title, String author) {
+            this.bookId = bookId;
+            this.title = title;
+            this.author = author;
+        }
+
+        public String toString() {
+            return "ID: " + bookId + ", Title: " + title + ", Author: " + author;
+        }
+    }
+
+    static Book linearSearch(List<Book> books, String title) {
+        for (Book book : books) {
+            if (book.title.equalsIgnoreCase(title)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    static Book binarySearch(List<Book> books, String title) {
+        int left = 0;
+        int right = books.size() - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            int cmp = books.get(mid).title.compareToIgnoreCase(title);
+            if (cmp == 0) {
+                return books.get(mid);
+            } else if (cmp < 0) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        List<Book> books = new ArrayList<>();
+        books.add(new Book(101, "The Alchemist", "Paulo Coelho"));
+        books.add(new Book(102, "Clean Code", "Robert Martin"));
+        books.add(new Book(103, "Effective Java", "Joshua Bloch"));
+        books.add(new Book(104, "Design Patterns", "GoF"));
+        books.add(new Book(105, "Java Concurrency", "Brian Goetz"));
+
+        System.out.println("Linear Search for 'Clean Code':");
+        Book found1 = linearSearch(books, "Clean Code");
+        System.out.println(found1 != null ? found1 : "Book not found");
+
+        Collections.sort(books, Comparator.comparing(b -> b.title.toLowerCase()));
+        System.out.println("\nBinary Search for 'Effective Java':");
+        Book found2 = binarySearch(books, "Effective Java");
+        System.out.println(found2 != null ? found2 : "Book not found");
+
+        System.out.println("\nBinary Search for 'Unknown Book':");
+        Book found3 = binarySearch(books, "Unknown Book");
+        System.out.println(found3 != null ? found3 : "Book not found");
+    }
+}

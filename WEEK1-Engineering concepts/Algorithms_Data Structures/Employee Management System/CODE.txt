@@ -1,0 +1,88 @@
+public class EmployeeManagementSystem {
+
+    static class Employee {
+        int employeeId;
+        String name;
+        String position;
+        double salary;
+
+        public Employee(int employeeId, String name, String position, double salary) {
+            this.employeeId = employeeId;
+            this.name = name;
+            this.position = position;
+            this.salary = salary;
+        }
+
+        public String toString() {
+            return "ID: " + employeeId + ", Name: " + name + ", Position: " + position + ", Salary: $" + salary;
+        }
+    }
+
+    static class EmployeeManager {
+        Employee[] employees;
+        int count;
+
+        public EmployeeManager(int size) {
+            employees = new Employee[size];
+            count = 0;
+        }
+
+        public void addEmployee(Employee emp) {
+            if (count < employees.length) {
+                employees[count++] = emp;
+            } else {
+                System.out.println("Employee array is full");
+            }
+        }
+
+        public Employee searchEmployee(int id) {
+            for (int i = 0; i < count; i++) {
+                if (employees[i].employeeId == id) {
+                    return employees[i];
+                }
+            }
+            return null;
+        }
+
+        public void deleteEmployee(int id) {
+            for (int i = 0; i < count; i++) {
+                if (employees[i].employeeId == id) {
+                    for (int j = i; j < count - 1; j++) {
+                        employees[j] = employees[j + 1];
+                    }
+                    employees[--count] = null;
+                    System.out.println("Employee with ID " + id + " deleted.");
+                    return;
+                }
+            }
+            System.out.println("Employee with ID " + id + " not found.");
+        }
+
+        public void traverseEmployees() {
+            for (int i = 0; i < count; i++) {
+                System.out.println(employees[i]);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        EmployeeManager manager = new EmployeeManager(5);
+        manager.addEmployee(new Employee(101, "Alice", "Developer", 60000));
+        manager.addEmployee(new Employee(102, "Bob", "Designer", 55000));
+        manager.addEmployee(new Employee(103, "Charlie", "Manager", 75000));
+
+        System.out.println("All Employees:");
+        manager.traverseEmployees();
+
+        System.out.println("\nSearching for employee with ID 102:");
+        Employee e = manager.searchEmployee(102);
+        if (e != null) System.out.println(e);
+        else System.out.println("Employee not found");
+
+        System.out.println("\nDeleting employee with ID 101:");
+        manager.deleteEmployee(101);
+
+        System.out.println("\nAll Employees after deletion:");
+        manager.traverseEmployees();
+    }
+}

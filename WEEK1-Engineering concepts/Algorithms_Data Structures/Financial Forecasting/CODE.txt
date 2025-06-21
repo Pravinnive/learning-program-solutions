@@ -1,0 +1,22 @@
+public class FinancialForecasting {
+
+    public static double predictFutureValue(double currentValue, double growthRate, int years) {
+        if (years == 0) {
+            return currentValue;
+        }
+        return predictFutureValue(currentValue * (1 + growthRate), growthRate, years - 1);
+    }
+
+    public static void main(String[] args) {
+        double initialValue = 10000.0;
+        double annualGrowthRate = 0.07;
+        int forecastYears = 5;
+
+        double futureValue = predictFutureValue(initialValue, annualGrowthRate, forecastYears);
+
+        System.out.println("Initial Value: $" + initialValue);
+        System.out.println("Annual Growth Rate: " + (annualGrowthRate * 100) + "%");
+        System.out.println("Years: " + forecastYears);
+        System.out.println("Predicted Future Value: $" + String.format("%.2f", futureValue));
+    }
+}

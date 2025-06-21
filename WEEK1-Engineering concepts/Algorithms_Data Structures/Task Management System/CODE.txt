@@ -1,0 +1,106 @@
+public class TaskManagementSystem {
+
+    static class Task {
+        int taskId;
+        String taskName;
+        String status;
+
+        public Task(int taskId, String taskName, String status) {
+            this.taskId = taskId;
+            this.taskName = taskName;
+            this.status = status;
+        }
+
+        public String toString() {
+            return "ID: " + taskId + ", Name: " + taskName + ", Status: " + status;
+        }
+    }
+
+    static class TaskNode {
+        Task task;
+        TaskNode next;
+
+        public TaskNode(Task task) {
+            this.task = task;
+            this.next = null;
+        }
+    }
+
+    static class TaskLinkedList {
+        TaskNode head;
+
+        public void addTask(Task task) {
+            TaskNode newNode = new TaskNode(task);
+            if (head == null) {
+                head = newNode;
+            } else {
+                TaskNode temp = head;
+                while (temp.next != null) {
+                    temp = temp.next;
+                }
+                temp.next = newNode;
+            }
+        }
+
+        public Task searchTask(int taskId) {
+            TaskNode temp = head;
+            while (temp != null) {
+                if (temp.task.taskId == taskId) {
+                    return temp.task;
+                }
+                temp = temp.next;
+            }
+            return null;
+        }
+
+        public void deleteTask(int taskId) {
+            if (head == null) return;
+            if (head.task.taskId == taskId) {
+                head = head.next;
+                System.out.println("Task with ID " + taskId + " deleted.");
+                return;
+            }
+            TaskNode prev = head;
+            TaskNode curr = head.next;
+            while (curr != null) {
+                if (curr.task.taskId == taskId) {
+                    prev.next = curr.next;
+                    System.out.println("Task with ID " + taskId + " deleted.");
+                    return;
+                }
+                prev = curr;
+                curr = curr.next;
+            }
+            System.out.println("Task with ID " + taskId + " not found.");
+        }
+
+        public void traverseTasks() {
+            TaskNode temp = head;
+            while (temp != null) {
+                System.out.println(temp.task);
+                temp = temp.next;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        TaskLinkedList list = new TaskLinkedList();
+        list.addTask(new Task(1, "Design UI", "Pending"));
+        list.addTask(new Task(2, "Develop Backend", "In Progress"));
+        list.addTask(new Task(3, "Test System", "Pending"));
+
+        System.out.println("All Tasks:");
+        list.traverseTasks();
+
+        System.out.println("\nSearching for Task with ID 2:");
+        Task found = list.searchTask(2);
+        if (found != null) System.out.println(found);
+        else System.out.println("Task not found");
+
+        System.out.println("\nDeleting Task with ID 1:");
+        list.deleteTask(1);
+
+        System.out.println("\nAll Tasks after deletion:");
+        list.traverseTasks();
+    }
+}

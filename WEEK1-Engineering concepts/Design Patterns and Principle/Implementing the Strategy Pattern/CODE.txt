@@ -1,0 +1,56 @@
+public class StrategyPatternExample {
+
+    interface PaymentStrategy {
+        void pay(double amount);
+    }
+
+    static class CreditCardPayment implements PaymentStrategy {
+        private String cardNumber;
+
+        public CreditCardPayment(String cardNumber) {
+            this.cardNumber = cardNumber;
+        }
+
+        public void pay(double amount) {
+            System.out.println("Paid $" + amount + " using Credit Card: " + cardNumber);
+        }
+    }
+
+    static class PayPalPayment implements PaymentStrategy {
+        private String email;
+
+        public PayPalPayment(String email) {
+            this.email = email;
+        }
+
+        public void pay(double amount) {
+            System.out.println("Paid $" + amount + " using PayPal account: " + email);
+        }
+    }
+
+    static class PaymentContext {
+        private PaymentStrategy strategy;
+
+        public void setPaymentStrategy(PaymentStrategy strategy) {
+            this.strategy = strategy;
+        }
+
+        public void payAmount(double amount) {
+            if (strategy != null) {
+                strategy.pay(amount);
+            } else {
+                System.out.println("Payment strategy not set.");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        PaymentContext context = new PaymentContext();
+
+        context.setPaymentStrategy(new CreditCardPayment("1234-5678-9012-3456"));
+        context.payAmount(250.00);
+
+        context.setPaymentStrategy(new PayPalPayment("user@example.com"));
+        context.payAmount(100.00);
+    }
+}
